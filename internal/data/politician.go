@@ -1,51 +1,58 @@
 package data
 
 import (
-	"encoding/json"
+	"encoding/xml"
 	v1 "github.com/kyzrfranz/buntesdach/api/v1"
-	"log/slog"
+	"github.com/samber/lo"
 )
 
 type PoliticianCatalogReader struct {
-	data *v1.PoliticianCatalog
+	data    *v1.PersonCatalog
+	fetcher PoliticiansFetcher
 }
 
-type PoliticianFetcher interface {
+type PoliticiansFetcher interface {
 	Fetch() ([]byte, error)
 }
 
-func NewPoliticianCatalogReader(fetcher PoliticianFetcher) (*PoliticianCatalogReader, error) {
-
-	data, err := fetcher.Fetch()
-	if err != nil {
-		return nil, err
-	}
-
-	var politicianCatalog v1.PoliticianCatalog
-
-	err = json.Unmarshal(data, &politicianCatalog)
-	if err != nil {
-		return nil, err
-	}
+func NewPoliticianCatalogReader(fetcher PoliticiansFetcher) (*PoliticianCatalogReader, error) {
 
 	return &PoliticianCatalogReader{
-		data: &politicianCatalog,
+		fetcher: fetcher,
 	}, nil
 }
 
-func (r *PoliticianCatalogReader) GetPoliticianCatalog() *v1.PoliticianCatalog {
-	return r.data
+func (r *PoliticianCatalogReader) GetPoliticianCatalog() (*v1.PersonCatalog, error) {
+	return r.readCatalog()
 }
 
-func (r *PoliticianCatalogReader) GetPolitician(id string) *v1.Politician {
-	if r.data == nil {
-		slog.Error("PoliticianCatalogReader.GetPolitician: data is nil")
-		return nil
+func (r *PoliticianCatalogReader) GetCatalogueEntry(id string) (*v1.PersonListEntry, error) {
+	catalog, err := r.readCatalog()
+	if err != nil {
+		return nil, err
 	}
-	catalog := *r.data
-	catalogEntry, ok := catalog[id]
+	catalogEntry, ok := lo.Find(catalog.Persons, func(entry v1.PersonListEntry) bool {
+		return entry.Id.Value == id
+	})
 	if !ok {
-		return nil
+		return nil, nil
 	}
-	return &catalogEntry
+
+	return &catalogEntry, nil
+}
+
+func (r *PoliticianCatalogReader) readCatalog() (*v1.PersonCatalog, error) {
+	data, err := r.fetcher.Fetch()
+	if err != nil {
+		return nil, err
+	}
+
+	var politicianCatalog v1.PersonCatalog
+
+	err = xml.Unmarshal(data, &politicianCatalog)
+	if err != nil {
+		return nil, err
+	}
+
+	return &politicianCatalog, nil
 }

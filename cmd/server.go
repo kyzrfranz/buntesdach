@@ -14,13 +14,13 @@ import (
 
 func main() {
 
-	dataUrl, err := url.Parse("https://www.bundestag.de/static/appdata/sitzplan/data.json") // TODO config
+	dataUrl, err := url.Parse("https://www.bundestag.de/xml/v2/mdb/index.xml") // TODO config
 	if err != nil {
 		bail("parse data url", err)
 	}
 
-	fetcher := &upstream.Politicians{Url: dataUrl}
-	pReader, err := data.NewPoliticianCatalogReader(fetcher)
+	listFetcher := &upstream.XMLFetcher{Url: dataUrl}
+	pReader, err := data.NewPoliticianCatalogReader(listFetcher)
 	if err != nil {
 		bail("create politician catalog reader", err)
 	}
@@ -30,9 +30,12 @@ func main() {
 	apiServer.Use(http.MiddlewareRecovery)
 	apiServer.Use(http.MiddlewareCORS)
 
-	pCatalogHandler := rest.NewHandler[v1.Politician](resources.NewPoliticianHandler(pReader))
+	pCatalogHandler := rest.NewHandler[v1.PersonListEntry](resources.NewCatalogueHandler(pReader))
 	apiServer.AddHandler("/politicians", pCatalogHandler.List)
 	apiServer.AddHandler("/politicians/{id}", pCatalogHandler.Get)
+
+	pHandler := rest.NewHandler[v1.Politician](resources.NewPoliticianHandler(pReader))
+	apiServer.AddHandler("/politicians/{id}/bio", pHandler.Get)
 
 	apiServer.ListenAndServe()
 }
