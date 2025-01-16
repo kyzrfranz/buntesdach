@@ -2,52 +2,59 @@ package resources
 
 import (
 	"context"
-	v1 "github.com/kyzrfranz/buntesdach/api/v1"
 )
 
-type catalogueHandler struct {
-	getter CatalogueGetter
+type catalogueHandler[E any] struct {
+	getter CatalogueDataGetter[E]
 }
 
-type CatalogueGetter interface {
-	GetPoliticianCatalog() (*v1.PersonCatalog, error)
-	GetCatalogueEntry(id string) (*v1.PersonListEntry, error)
+type CatalogueDataGetter[E any] interface {
+	CatalogueGetter[E]
+	CatalogueEntryGetter[E]
 }
 
-func NewCatalogueHandler(getter CatalogueGetter) Handler[v1.PersonListEntry] {
-	return catalogueHandler{
+type CatalogueGetter[E any] interface {
+	GetCatalog() ([]E, error)
+}
+
+type CatalogueEntryGetter[E any] interface {
+	GetCatalogueEntry(id string) (*E, error)
+}
+
+func NewCatalogueHandler[E any](getter CatalogueDataGetter[E]) Handler[E] {
+	return catalogueHandler[E]{
 		getter: getter,
 	}
 }
 
-func (s catalogueHandler) List(ctx context.Context) []v1.PersonListEntry {
-	catalog, err := s.getter.GetPoliticianCatalog()
+func (s catalogueHandler[E]) List(ctx context.Context) []E {
+	catalog, err := s.getter.GetCatalog()
 	if err != nil {
 		return nil
 	}
-	return catalog.Persons
+	return catalog
 }
 
-func (s catalogueHandler) Get(ctx context.Context, id string) (*v1.PersonListEntry, error) {
+func (s catalogueHandler[E]) Get(ctx context.Context, id string) (*E, error) {
 	return s.getter.GetCatalogueEntry(id)
 }
 
-func (s catalogueHandler) Delete(ctx context.Context, id string) error {
+func (s catalogueHandler[E]) Delete(ctx context.Context, id string) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s catalogueHandler) Create(ctx context.Context, item *v1.PersonListEntry) (*v1.PersonListEntry, error) {
+func (s catalogueHandler[E]) Create(ctx context.Context, item *E) (*E, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s catalogueHandler) Update(ctx context.Context, oldItem *v1.PersonListEntry, newItem *v1.PersonListEntry) (*v1.PersonListEntry, error) {
+func (s catalogueHandler[E]) Update(ctx context.Context, oldItem *E, newItem *E) (*E, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s catalogueHandler) Name() string {
+func (s catalogueHandler[E]) Name() string {
 	//TODO implement me
 	panic("implement me")
 }

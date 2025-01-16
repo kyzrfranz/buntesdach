@@ -2,17 +2,14 @@ package resources
 
 import (
 	"context"
-	"encoding/xml"
 	v1 "github.com/kyzrfranz/buntesdach/api/v1"
-	myhttp "github.com/kyzrfranz/buntesdach/internal/http"
-	"net/url"
 )
 
 type politicianHandler struct {
-	getter CatalogueGetter
+	getter CatalogueGetter[v1.PersonListEntry]
 }
 
-func NewPoliticianHandler(getter CatalogueGetter) Handler[v1.Politician] {
+func NewPoliticianHandler(getter CatalogueGetter[v1.PersonListEntry]) Handler[v1.Politician] {
 	return politicianHandler{
 		getter: getter,
 	}
@@ -25,23 +22,24 @@ func (p politicianHandler) List(ctx context.Context) []v1.Politician {
 
 func (p politicianHandler) Get(ctx context.Context, id string) (*v1.Politician, error) {
 
-	catalogEntry, err := p.getter.GetCatalogueEntry(id)
-	if err != nil {
-		return nil, err
-	}
-
-	bUrl, err := url.Parse(catalogEntry.InfoXMLURL)
-	if err != nil {
-		return nil, err
-	}
-	data, err := myhttp.FetchUrl(bUrl)
-
-	var bio v1.Politician
-	if err = xml.Unmarshal(data, &bio); err != nil {
-		return nil, err
-	}
-
-	return &bio, nil
+	//catalogEntry, err := p.getter.GetCatalogueEntry(id)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//
+	//bUrl, err := url.Parse(catalogEntry.InfoXMLURL)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//data, err := myhttp.FetchUrl(bUrl)
+	//
+	//var bio v1.Politician
+	//if err = xml.Unmarshal(data, &bio); err != nil {
+	//	return nil, err
+	//}
+	//
+	//return &bio, nil
+	return nil, nil
 }
 
 func (p politicianHandler) Delete(ctx context.Context, id string) error {

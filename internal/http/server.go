@@ -76,9 +76,9 @@ func (a *ApiServer) ListenAndServe() {
 
 	// Run the server in a goroutine
 	go func() {
-		slog.Log(context.Background(), slog.LevelInfo, "Server is running on port 8001...")
+		slog.Log(context.Background(), slog.LevelInfo, "Server is running", "addr", a.server.Addr)
 		if err := a.server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-			slog.Log(context.Background(), slog.LevelError, "Could not listen on :8001")
+			slog.Log(context.Background(), slog.LevelError, "Could not listen", "addr", a.server.Addr)
 			os.Exit(1)
 		}
 	}()

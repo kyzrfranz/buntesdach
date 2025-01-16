@@ -3,6 +3,7 @@ package data
 import (
 	"encoding/xml"
 	v1 "github.com/kyzrfranz/buntesdach/api/v1"
+	"github.com/kyzrfranz/buntesdach/pkg/resources"
 	"github.com/samber/lo"
 )
 
@@ -22,8 +23,19 @@ func NewPoliticianCatalogReader(fetcher PoliticiansFetcher) (*PoliticianCatalogR
 	}, nil
 }
 
-func (r *PoliticianCatalogReader) GetPoliticianCatalog() (*v1.PersonCatalog, error) {
-	return r.readCatalog()
+func (r *PoliticianCatalogReader) GetEntry(id string) (*resources.Entry, error) {
+	var e resources.Entry
+	raw, _ := r.GetCatalogueEntry(id)
+	e = *raw
+	return &e, nil
+}
+
+func (r *PoliticianCatalogReader) GetCatalog() ([]v1.PersonListEntry, error) {
+	cat, err := r.readCatalog()
+	if err != nil {
+		return nil, err
+	}
+	return cat.Persons, nil
 }
 
 func (r *PoliticianCatalogReader) GetCatalogueEntry(id string) (*v1.PersonListEntry, error) {
