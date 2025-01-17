@@ -1,0 +1,46 @@
+# Setup secrets in github:
+# - GCP_SA_KEY: JSON key of service account (roles: Cloud Run Admin, Storage Admin) 
+# - GCP_PROJECT_ID: Google cloud project name 
+
+name: Deploy to Google Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Build, Dockerize, and Deploy to Cloud Run
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          version: 'latest'
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+      - name: Authenticate Docker with GCR
+        run: |
+          gcloud auth configure-docker eu.gcr.io
+
+      - name: Build Docker image
+        run: |
+          docker buildx build --platform linux/amd64 -t eu.gcr.io/buntesdach/buntesdach-api:latest .
+
+      - name: Push Docker image to GCR
+        run: |
+          docker push eu.gcr.io/buntesdach/buntesdach-api:latest
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy buntesdach-api \
+            --image eu.gcr.io/buntesdach/buntesdach-api:latest \
+            --region europe-west1 \
+            --platform managed \
+            --allow-unauthenticated
