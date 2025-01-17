@@ -1,96 +1,96 @@
 package v1
 
 type ID struct {
-	Value  string `json:",chardata" xml:",chardata"`
+	Value  string `json:"value" xml:",chardata"`
 	Status string `json:"status" xml:"status,attr"`
 }
 
 type MdbName struct {
-	Value  string `json:",chardata" xml:",chardata"`
+	Value  string `json:"value" xml:",chardata"`
 	Status string `json:"status" xml:"status,attr"`
 }
 
 type Politician struct {
-	DocumentInfo DocumentInfo  `json:"dokumentInfo" xml:"dokumentInfo"`
-	Info         PoliticianBio `json:"mdbInfo" xml:"mdbInfo"`
-	Media        Media         `json:"mdbMedien" xml:"mdbMedien"`
+	DocumentInfo DocumentInfo  `json:"documentInfo" xml:"dokumentInfo"`
+	Bio          PoliticianBio `json:"bio" xml:"mdbInfo"`
+	Media        Media         `json:"media" xml:"mdbMedien"`
 }
 
 type PoliticianBio struct {
-	Id                                   ID            `json:"mdbID" xml:"mdbID"`
+	Id                                   ID            `json:"id" xml:"mdbID"`
 	ArticleID                            string        `json:"articleId" xml:"articleId"`
-	SourceURL                            string        `json:"sourceURL" xml:"sourceURL"`
-	ExitDate                             string        `json:"mdbAustrittsdatum,omitempty" xml:"mdbAustrittsdatum"`
-	LastName                             string        `json:"mdbZuname" xml:"mdbZuname"`
-	FirstName                            string        `json:"mdbVorname" xml:"mdbVorname"`
-	NobilityTitle                        string        `json:"mdbAdelstitel,omitempty" xml:"mdbAdelstitel"`
-	AcademicTitle                        string        `json:"mdbAkademischerTitel,omitempty" xml:"mdbAkademischerTitel"`
-	LocationSuffix                       string        `json:"mdbOrtszusatz,omitempty" xml:"mdbOrtszusatz"`
-	DateOfBirth                          string        `json:"mdbGeburtsdatum" xml:"mdbGeburtsdatum"`
-	ReligionOrDenomination               string        `json:"mdbReligionKonfession,omitempty" xml:"mdbReligionKonfession"`
-	EducationOrProfessionalQualification string        `json:"mdbSchulOderBerufsabschluss,omitempty" xml:"mdbSchulOderBerufsabschluss"`
-	HigherEducation                      string        `json:"mdbHochschulbildung,omitempty" xml:"mdbHochschulbildung"`
-	Profession                           Profession    `json:"mdbBeruf" xml:"mdbBeruf"`
-	Gender                               string        `json:"mdbGeschlecht" xml:"mdbGeschlecht"`
-	MaritalStatus                        string        `json:"mdbFamilienstand,omitempty" xml:"mdbFamilienstand"`
-	NumberKids                           string        `json:"mdbAnzahlKinder,omitempty" xml:"mdbAnzahlKinder"`
-	Faction                              string        `json:"mdbFraktion" xml:"mdbFraktion"`
-	Party                                string        `json:"mdbPartei" xml:"mdbPartei"`
-	State                                string        `json:"mdbLand" xml:"mdbLand"`
-	Constituency                         Constituency  `json:"mdbWahlkreis" xml:"mdbWahlkreis"`
-	Elected                              string        `json:"mdbGewaehlt" xml:"mdbGewaehlt"`
-	BioURL                               string        `json:"mdbBioURL" xml:"mdbBioURL"`
-	BiographicInfo                       string        `json:"mdbBiografischeInformationen,omitempty" xml:"mdbBiografischeInformationen"`
-	Trivia                               string        `json:"mdbWissenswertes,omitempty" xml:"mdbWissenswertes"`
-	Homepage                             string        `json:"mdbHomepageURL,omitempty" xml:"mdbHomepageURL"`
-	OtherWebsite                         OtherWebsites `json:"mdbSonstigeWebsites,omitempty" xml:"mdbSonstigeWebsites"`
-	Phone                                string        `json:"mdbTelefon,omitempty" xml:"mdbTelefon"`
-	Memberships                          Memberships   `json:"mdbMitgliedschaften,omitempty" xml:"mdbMitgliedschaften"`
-	MandatedPublishableInfo              string        `json:"mdbVeroeffentlichungspflichtigeAngaben,omitempty" xml:"mdbVeroeffentlichungspflichtigeAngaben"`
+	SourceURL                            string        `json:"sourceUrl" xml:"sourceURL"`
+	ExitDate                             string        `json:"exitDate,omitempty" xml:"mdbAustrittsdatum"`
+	LastName                             string        `json:"lastName" xml:"mdbZuname"`
+	FirstName                            string        `json:"firstName" xml:"mdbVorname"`
+	NobilityTitle                        string        `json:"nobilityTitle,omitempty" xml:"mdbAdelstitel"`
+	AcademicTitle                        string        `json:"academicTitle,omitempty" xml:"mdbAkademischerTitel"`
+	LocationSuffix                       string        `json:"locationSuffix,omitempty" xml:"mdbOrtszusatz"`
+	DateOfBirth                          string        `json:"dateOfBirth" xml:"mdbGeburtsdatum"`
+	ReligionOrDenomination               string        `json:"religionOrDenomination,omitempty" xml:"mdbReligionKonfession"`
+	EducationOrProfessionalQualification string        `json:"educationOrProfessionalQualification,omitempty" xml:"mdbSchulOderBerufsabschluss"`
+	HigherEducation                      string        `json:"higherEducation,omitempty" xml:"mdbHochschulbildung"`
+	Profession                           Profession    `json:"profession" xml:"mdbBeruf"`
+	Gender                               string        `json:"gender" xml:"mdbGeschlecht"`
+	MaritalStatus                        string        `json:"maritalStatus,omitempty" xml:"mdbFamilienstand"`
+	NumberKids                           string        `json:"numberOfKids,omitempty" xml:"mdbAnzahlKinder"`
+	Faction                              string        `json:"faction" xml:"mdbFraktion"`
+	Party                                string        `json:"party" xml:"mdbPartei"`
+	State                                string        `json:"state" xml:"mdbLand"`
+	Constituency                         Constituency  `json:"constituency" xml:"mdbWahlkreis"`
+	Elected                              string        `json:"elected" xml:"mdbGewaehlt"`
+	BioURL                               string        `json:"bioUrl" xml:"mdbBioURL"`
+	BiographicInfo                       string        `json:"biographicInfo,omitempty" xml:"mdbBiografischeInformationen"`
+	Trivia                               string        `json:"trivia,omitempty" xml:"mdbWissenswertes"`
+	Homepage                             string        `json:"homepage,omitempty" xml:"mdbHomepageURL"`
+	OtherWebsite                         OtherWebsites `json:"otherWebsites,omitempty" xml:"mdbSonstigeWebsites"`
+	Phone                                string        `json:"phone,omitempty" xml:"mdbTelefon"`
+	Memberships                          Memberships   `json:"memberships,omitempty" xml:"mdbMitgliedschaften"`
+	MandatedPublishableInfo              string        `json:"mandatedPublishableInfo,omitempty" xml:"mdbVeroeffentlichungspflichtigeAngaben"`
 }
 
 type Profession struct {
-	Field string `json:"berufsfeld,omitempty" xml:"berufsfeld,attr"`
-	Value string `json:",chardata" xml:",chardata"`
+	Field string `json:"field,omitempty" xml:"berufsfeld,attr"`
+	Value string `json:"value" xml:",chardata"`
 }
 
 type Constituency struct {
-	Number string `json:"mdbWahlkreisNummer,omitempty" xml:"mdbWahlkreisNummer"`
-	Name   string `json:"mdbWahlkreisName,omitempty" xml:"mdbWahlkreisName"`
-	Url    string `json:"mdbWahlkreisURL,omitempty" xml:"mdbWahlkreisURL"`
+	Number string `json:"number,omitempty" xml:"mdbWahlkreisNummer"`
+	Name   string `json:"name,omitempty" xml:"mdbWahlkreisName"`
+	Url    string `json:"url,omitempty" xml:"mdbWahlkreisURL"`
 }
 
 type OtherWebsites struct {
-	Website []Website `json:"mdbSonstigeWebsite,omitempty" xml:"mdbSonstigeWebsite"`
+	Website []Website `json:"websites,omitempty" xml:"mdbSonstigeWebsite"`
 }
 
 type Website struct {
-	Title string `json:"mdbSonstigeWebsiteTitel" xml:"mdbSonstigeWebsiteTitel"`
-	URL   string `json:"mdbSonstigeWebsiteURL" xml:"mdbSonstigeWebsiteURL"`
+	Title string `json:"title" xml:"mdbSonstigeWebsiteTitel"`
+	URL   string `json:"url" xml:"mdbSonstigeWebsiteURL"`
 }
 
 type Memberships struct {
-	LeadCommittees             []Committee `json:"mdbObleuteGremien,omitempty" xml:"mdbObleuteGremien>mdbObleuteGremium"`
-	RegularMemberCommittees    []Committee `json:"mdbOrdentlichesMitgliedGremien,omitempty" xml:"mdbOrdentlichesMitgliedGremien>mdbOrdentlichesMitgliedGremium"`
-	SubstituteMemberCommittees []Committee `json:"mdbStellvertretendesMitgliedGremien,omitempty" xml:"mdbStellvertretendesMitgliedGremien>mdbStellvertretendesMitgliedGremium"`
-	ViceChairOtherCommittees   []Committee `json:"mdbStellvVorsitzSonstigeGremien,omitempty" xml:"mdbStellvVorsitzSonstigeGremien>mdbStellvVorsitzSonstigesGremium"`
+	LeadCommittees             []Committee `json:"leadCommittees,omitempty" xml:"mdbObleuteGremien>mdbObleuteGremium"`
+	RegularMemberCommittees    []Committee `json:"regularMemberCommittees,omitempty" xml:"mdbOrdentlichesMitgliedGremien>mdbOrdentlichesMitgliedGremium"`
+	SubstituteMemberCommittees []Committee `json:"substituteMemberCommittees,omitempty" xml:"mdbStellvertretendesMitgliedGremien>mdbStellvertretendesMitgliedGremium"`
+	ViceChairOtherCommittees   []Committee `json:"viceChairOtherCommittees,omitempty" xml:"mdbStellvVorsitzSonstigeGremien>mdbStellvVorsitzSonstigesGremium"`
 }
 
 type Committee struct {
 	Id   string `json:"id,omitempty" xml:"id,attr"`
-	Name string `json:"gremiumName" xml:"gremiumName"`
-	Url  string `json:"gremiumURL" xml:"gremiumURL"`
+	Name string `json:"name" xml:"gremiumName"`
+	Url  string `json:"url" xml:"gremiumURL"`
 }
 
 type Media struct {
-	Foto        Foto   `json:"mdbFoto" xml:"mdbFoto"`
-	SpeechesUrl string `json:"mdbRedenVorPlenumURL" xml:"mdbRedenVorPlenumURL"`
-	SpeechesRSS string `json:"mdbRedenVorPlenumRSS" xml:"mdbRedenVorPlenumRSS"`
+	Foto        Foto   `json:"photo" xml:"mdbFoto"`
+	SpeechesUrl string `json:"speechesUrl" xml:"mdbRedenVorPlenumURL"`
+	SpeechesRSS string `json:"speechesRSS" xml:"mdbRedenVorPlenumRSS"`
 }
 
 type Foto struct {
-	URL       string `json:"mdbFotoURL" xml:"mdbFotoURL"`
-	Copyright string `json:"mdbFotoCopyright" xml:"mdbFotoCopyright"`
-	LargeUrl  string `json:"mdbFotoGrossURL" xml:"mdbFotoGrossURL"`
-	AltText   string `json:"imageAltText" xml:"imageAltText"`
+	URL       string `json:"url" xml:"mdbFotoURL"`
+	Copyright string `json:"copyright" xml:"mdbFotoCopyright"`
+	LargeUrl  string `json:"largeUrl" xml:"mdbFotoGrossURL"`
+	AltText   string `json:"altText" xml:"imageAltText"`
 }

@@ -3,9 +3,9 @@ package v1
 import "net/url"
 
 type PersonCatalog struct {
-	DocumentInfo  DocumentInfo      `json:"dokumentInfo" xml:"dokumentInfo"`
+	DocumentInfo  DocumentInfo      `json:"documentInfo" xml:"dokumentInfo"`
 	DeleteRestore DeleteRestore     `json:"deleteRestore" xml:"deleteRestore"`
-	Persons       []PersonListEntry `json:"mdbs" xml:"mdbs>mdb"`
+	Persons       []PersonListEntry `json:"persons" xml:"mdbs>mdb"`
 }
 
 func (c PersonCatalog) GetItems() []PersonListEntry {
@@ -18,19 +18,19 @@ type DeleteRestore struct {
 }
 
 type PersonListEntry struct {
-	Faction              string       `json:"fraktion" xml:"fraktion,attr"`
-	Id                   ID           `json:"mdbID" xml:"mdbID"`
-	Name                 MdbName      `json:"mdbName" xml:"mdbName"`
-	BioURL               string       `json:"mdbBioURL" xml:"mdbBioURL"`
-	InfoXMLURL           string       `json:"mdbInfoXMLURL" xml:"mdbInfoXMLURL"`
-	InfoXMLURLMitmischen string       `json:"mdbInfoXMLURLMitmischen,omitempty" xml:"mdbInfoXMLURLMitmischen"`
-	State                string       `json:"mdbLand" xml:"mdbLand"`
-	Constituency         Constituency `json:"mdbWahlkreis,omitempty" xml:"mdbWahlkreis"`
-	Elected              string       `json:"mdbGewaehlt,omitempty" xml:"mdbGewaehlt"`
-	FotoURL              string       `json:"mdbFotoURL" xml:"mdbFotoURL"`
-	FotoGrossURL         string       `json:"mdbFotoGrossURL" xml:"mdbFotoGrossURL"`
-	FotoLastChanged      string       `json:"mdbFotoLastChanged" xml:"mdbFotoLastChanged"`
-	FotoChangedDateTime  string       `json:"mdbFotoChangedDateTime" xml:"mdbFotoChangedDateTime"`
+	Faction              string       `json:"faction" xml:"fraktion,attr"`
+	Id                   ID           `json:"id" xml:"mdbID"`
+	Name                 MdbName      `json:"name" xml:"mdbName"`
+	BioURL               string       `json:"bioUrl" xml:"mdbBioURL"`
+	InfoXMLURL           string       `json:"infoXmlUrl" xml:"mdbInfoXMLURL"`
+	InfoXMLURLMitmischen string       `json:"infoXmlUrlMitmischen,omitempty" xml:"mdbInfoXMLURLMitmischen"`
+	State                string       `json:"state" xml:"mdbLand"`
+	Constituency         Constituency `json:"constituency,omitempty" xml:"mdbWahlkreis"`
+	Elected              string       `json:"elected,omitempty" xml:"mdbGewaehlt"`
+	FotoURL              string       `json:"photoUrl" xml:"mdbFotoURL"`
+	FotoGrossURL         string       `json:"photoGrossUrl" xml:"mdbFotoGrossURL"`
+	FotoLastChanged      string       `json:"photoLastChanged" xml:"mdbFotoLastChanged"`
+	FotoChangedDateTime  string       `json:"photoChangedDateTime" xml:"mdbFotoChangedDateTime"`
 	ImageAltText         string       `json:"imageAltText" xml:"imageAltText"`
 	LastChanged          string       `json:"lastChanged" xml:"lastChanged"`
 	ChangedDateTime      string       `json:"changedDateTime" xml:"changedDateTime"`
