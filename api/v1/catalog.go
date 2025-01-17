@@ -3,7 +3,7 @@ package v1
 import "net/url"
 
 type PersonCatalog struct {
-	DokumentInfo  DokumentInfo      `json:"dokumentInfo" xml:"dokumentInfo"`
+	DocumentInfo  DocumentInfo      `json:"dokumentInfo" xml:"dokumentInfo"`
 	DeleteRestore DeleteRestore     `json:"deleteRestore" xml:"deleteRestore"`
 	Persons       []PersonListEntry `json:"mdbs" xml:"mdbs>mdb"`
 }
@@ -25,8 +25,8 @@ type PersonListEntry struct {
 	InfoXMLURL           string       `json:"mdbInfoXMLURL" xml:"mdbInfoXMLURL"`
 	InfoXMLURLMitmischen string       `json:"mdbInfoXMLURLMitmischen,omitempty" xml:"mdbInfoXMLURLMitmischen"`
 	State                string       `json:"mdbLand" xml:"mdbLand"`
-	Constituancy         MdbWahlkreis `json:"mdbWahlkreis" xml:"mdbWahlkreis"`
-	Elected              string       `json:"mdbGewaehlt" xml:"mdbGewaehlt"`
+	Constituency         Constituency `json:"mdbWahlkreis,omitempty" xml:"mdbWahlkreis"`
+	Elected              string       `json:"mdbGewaehlt,omitempty" xml:"mdbGewaehlt"`
 	FotoURL              string       `json:"mdbFotoURL" xml:"mdbFotoURL"`
 	FotoGrossURL         string       `json:"mdbFotoGrossURL" xml:"mdbFotoGrossURL"`
 	FotoLastChanged      string       `json:"mdbFotoLastChanged" xml:"mdbFotoLastChanged"`
@@ -46,7 +46,7 @@ func (c PersonListEntry) GetDetailUrl() *url.URL {
 }
 
 type CommitteeCatalog struct {
-	DokumentInfo DokumentInfo         `xml:"dokumentInfo" json:"dokumentInfo"`
+	DocumentInfo DocumentInfo         `xml:"dokumentInfo" json:"dokumentInfo"`
 	Committees   []CommitteeListEntry `xml:"ausschuesse>ausschuss" json:"committees"`
 }
 
@@ -55,7 +55,7 @@ func (c CommitteeCatalog) GetItems() []CommitteeListEntry {
 }
 
 type CommitteeListEntry struct {
-	ID                   string `xml:"id,attr" json:"id"`
+	Id                   string `xml:"id,attr" json:"id"`
 	Live                 int    `xml:"live" json:"live"`
 	Name                 string `xml:"ausschussName" json:"committeeName"`
 	ShortName            string `xml:"ausschussKurzName" json:"committeeShortName"`
@@ -74,7 +74,7 @@ type CommitteeListEntry struct {
 }
 
 func (c CommitteeListEntry) GetId() string {
-	return c.ID
+	return c.Id
 }
 
 func (c CommitteeListEntry) GetDetailUrl() *url.URL {

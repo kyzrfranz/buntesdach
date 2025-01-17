@@ -14,45 +14,28 @@ import (
 
 func main() {
 
-	dataUrl, err := url.Parse("https://www.bundestag.de/xml/v2/mdb/index.xml") // TODO config
-	if err != nil {
-		bail("parse data url", err)
-	}
+	dataUrl := mustGetUrl("https://www.bundestag.de/xml/v2/mdb/index.xml") // TODO config
+	politicianReader := data.NewCatalogReader[v1.PersonCatalog, v1.PersonListEntry](&upstream.XMLFetcher{Url: dataUrl})
 
-	listFetcher := &upstream.XMLFetcher{Url: dataUrl}
-	pReader := data.NewCatalogReader[v1.PersonCatalog, v1.PersonListEntry](listFetcher)
-	if err != nil {
-		bail("create politician catalog reader", err)
-	}
+	committeeUrl := mustGetUrl("https://www.bundestag.de/xml/v2/ausschuesse/index.xml") // TODO config
+	committeeReader := data.NewCatalogReader[v1.CommitteeCatalog, v1.CommitteeListEntry](&upstream.XMLFetcher{Url: committeeUrl})
 
 	apiServer := http.NewApiServer(8080)
 
 	apiServer.Use(http.MiddlewareRecovery)
 	apiServer.Use(http.MiddlewareCORS)
 
-	pCatalogHandler := rest.NewHandler[v1.PersonListEntry](resources.NewCatalogueHandler[v1.PersonListEntry](&pReader))
-	apiServer.AddHandler("/politicians", pCatalogHandler.List)
-	apiServer.AddHandler("/politicians/{id}", pCatalogHandler.Get)
+	politicianCatalogHandler := rest.NewHandler[v1.PersonListEntry](resources.NewCatalogueRepo[v1.PersonListEntry](&politicianReader))
+	politicianDetailHandler := rest.NewHandler[v1.Politician](resources.NewDetailRepo[v1.Politician](&politicianReader))
+	committeeCatalogueHandler := rest.NewHandler[v1.CommitteeListEntry](resources.NewCatalogueRepo[v1.CommitteeListEntry](&committeeReader))
+	committeeDetailHandler := rest.NewHandler[v1.CommitteeDetails](resources.NewDetailRepo[v1.CommitteeDetails](&committeeReader))
 
-	pHandler := resources.NewDetailHandler[v1.Politician](&pReader)
-	ppHandler := rest.NewHandler[v1.Politician](pHandler)
-	apiServer.AddHandler("/politicians/{id}/bio", ppHandler.Get)
-
-	committeeUrl, err := url.Parse("https://www.bundestag.de/xml/v2/ausschuesse/index.xml") // TODO config
-	if err != nil {
-		bail("parse data url", err)
-	}
-	committeeFetcher := &upstream.XMLFetcher{Url: committeeUrl}
-	cReader := data.NewCatalogReader[v1.CommitteeCatalog, v1.CommitteeListEntry](committeeFetcher)
-	pCommitteeHandler := rest.NewHandler[v1.CommitteeListEntry](resources.NewCatalogueHandler[v1.CommitteeListEntry](&cReader))
-
-	apiServer.AddHandler("/committees", pCommitteeHandler.List)
-	apiServer.AddHandler("/committees/{id}", pCommitteeHandler.Get)
-
-	cDetailHandler := resources.NewDetailHandler[v1.CommitteeDetails](&cReader)
-	cHandler := rest.NewHandler[v1.CommitteeDetails](cDetailHandler)
-
-	apiServer.AddHandler("/committees/{id}/detail", cHandler.Get)
+	apiServer.AddHandler("/politicians", politicianCatalogHandler.List)
+	apiServer.AddHandler("/politicians/{id}", politicianCatalogHandler.Get)
+	apiServer.AddHandler("/politicians/{id}/bio", politicianDetailHandler.Get)
+	apiServer.AddHandler("/committees", committeeCatalogueHandler.List)
+	apiServer.AddHandler("/committees/{id}", committeeCatalogueHandler.Get)
+	apiServer.AddHandler("/committees/{id}/detail", committeeDetailHandler.Get)
 
 	apiServer.ListenAndServe()
 }
@@ -60,4 +43,13 @@ func main() {
 func bail(stage string, err error) {
 	slog.Error("server bailing out", slog.String("stage", stage), "error", err)
 	os.Exit(1)
+}
+
+func mustGetUrl(s string) *url.URL {
+	parsedUrl, err := url.Parse(s)
+	if err != nil {
+		bail("parse data url", err)
+	}
+
+	return parsedUrl
 }

@@ -4,7 +4,7 @@ import (
 	"context"
 )
 
-type catalogueHandler[E any] struct {
+type catalogueRepo[E any] struct {
 	getter CatalogueDataGetter[E]
 }
 
@@ -21,13 +21,13 @@ type CatalogueEntryGetter[E any] interface {
 	GetCatalogueEntry(id string) (*E, error)
 }
 
-func NewCatalogueHandler[E any](getter CatalogueDataGetter[E]) Handler[E] {
-	return catalogueHandler[E]{
+func NewCatalogueRepo[E any](getter CatalogueDataGetter[E]) Repository[E] {
+	return catalogueRepo[E]{
 		getter: getter,
 	}
 }
 
-func (s catalogueHandler[E]) List(ctx context.Context) []E {
+func (s catalogueRepo[E]) List(ctx context.Context) []E {
 	catalog, err := s.getter.GetCatalog()
 	if err != nil {
 		return nil
@@ -35,26 +35,26 @@ func (s catalogueHandler[E]) List(ctx context.Context) []E {
 	return catalog
 }
 
-func (s catalogueHandler[E]) Get(ctx context.Context, id string) (*E, error) {
+func (s catalogueRepo[E]) Get(ctx context.Context, id string) (*E, error) {
 	return s.getter.GetCatalogueEntry(id)
 }
 
-func (s catalogueHandler[E]) Delete(ctx context.Context, id string) error {
+func (s catalogueRepo[E]) Delete(ctx context.Context, id string) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s catalogueHandler[E]) Create(ctx context.Context, item *E) (*E, error) {
+func (s catalogueRepo[E]) Create(ctx context.Context, item *E) (*E, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s catalogueHandler[E]) Update(ctx context.Context, oldItem *E, newItem *E) (*E, error) {
+func (s catalogueRepo[E]) Update(ctx context.Context, oldItem *E, newItem *E) (*E, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s catalogueHandler[E]) Name() string {
+func (s catalogueRepo[E]) Name() string {
 	//TODO implement me
 	panic("implement me")
 }

@@ -4,7 +4,7 @@ import (
 	"context"
 )
 
-type Handler[T any] interface {
+type Repository[T any] interface {
 	List(ctx context.Context) []T
 	Get(ctx context.Context, id string) (*T, error)
 	Delete(ctx context.Context, id string) error

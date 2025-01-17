@@ -16,22 +16,22 @@ type EntryGetter interface {
 	GetEntry(id string) (*Entry, error)
 }
 
-type detailHandler[T any] struct {
+type detailRepo[T any] struct {
 	getter EntryGetter
 }
 
-func NewDetailHandler[T any](getter EntryGetter) Handler[T] {
-	return detailHandler[T]{
+func NewDetailRepo[T any](getter EntryGetter) Repository[T] {
+	return detailRepo[T]{
 		getter: getter,
 	}
 }
 
-func (p detailHandler[T]) List(ctx context.Context) []T {
+func (p detailRepo[T]) List(ctx context.Context) []T {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (p detailHandler[T]) Get(ctx context.Context, id string) (*T, error) {
+func (p detailRepo[T]) Get(ctx context.Context, id string) (*T, error) {
 
 	var dtg Entry
 
@@ -51,22 +51,22 @@ func (p detailHandler[T]) Get(ctx context.Context, id string) (*T, error) {
 	return &detailType, nil
 }
 
-func (p detailHandler[T]) Delete(ctx context.Context, id string) error {
+func (p detailRepo[T]) Delete(ctx context.Context, id string) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (p detailHandler[T]) Create(ctx context.Context, item *T) (*T, error) {
+func (p detailRepo[T]) Create(ctx context.Context, item *T) (*T, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (p detailHandler[T]) Update(ctx context.Context, oldItem *T, newItem *T) (*T, error) {
+func (p detailRepo[T]) Update(ctx context.Context, oldItem *T, newItem *T) (*T, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (p detailHandler[T]) Name() string {
+func (p detailRepo[T]) Name() string {
 	//TODO implement me
 	panic("implement me")
 }

@@ -10,21 +10,16 @@ type MdbName struct {
 	Status string `json:"status" xml:"status,attr"`
 }
 
-type MdbWahlkreis struct {
-	MdbWahlkreisNummer string `json:"mdbWahlkreisNummer" xml:"mdbWahlkreisNummer"`
-	MdbWahlkreisName   string `json:"mdbWahlkreisName" xml:"mdbWahlkreisName"`
-}
-
 type Politician struct {
-	DokumentInfo DokumentInfo  `json:"dokumentInfo" xml:"dokumentInfo"`
-	MdbInfo      PoliticianBio `json:"mdbInfo" xml:"mdbInfo"`
-	MdbMedien    MDBMedien     `json:"mdbMedien" xml:"mdbMedien"`
+	DocumentInfo DocumentInfo  `json:"dokumentInfo" xml:"dokumentInfo"`
+	Info         PoliticianBio `json:"mdbInfo" xml:"mdbInfo"`
+	Media        Media         `json:"mdbMedien" xml:"mdbMedien"`
 }
 
 type PoliticianBio struct {
+	Id                                   ID            `json:"mdbID" xml:"mdbID"`
 	ArticleID                            string        `json:"articleId" xml:"articleId"`
 	SourceURL                            string        `json:"sourceURL" xml:"sourceURL"`
-	ID                                   ID            `json:"mdbID" xml:"mdbID"`
 	ExitDate                             string        `json:"mdbAustrittsdatum,omitempty" xml:"mdbAustrittsdatum"`
 	LastName                             string        `json:"mdbZuname" xml:"mdbZuname"`
 	FirstName                            string        `json:"mdbVorname" xml:"mdbVorname"`
@@ -60,9 +55,9 @@ type Profession struct {
 }
 
 type Constituency struct {
-	Number string `json:"mdbWahlkreisNummer" xml:"mdbWahlkreisNummer"`
-	Name   string `json:"mdbWahlkreisName" xml:"mdbWahlkreisName"`
-	Url    string `json:"mdbWahlkreisURL" xml:"mdbWahlkreisURL"`
+	Number string `json:"mdbWahlkreisNummer,omitempty" xml:"mdbWahlkreisNummer"`
+	Name   string `json:"mdbWahlkreisName,omitempty" xml:"mdbWahlkreisName"`
+	Url    string `json:"mdbWahlkreisURL,omitempty" xml:"mdbWahlkreisURL"`
 }
 
 type OtherWebsites struct {
@@ -87,7 +82,7 @@ type Committee struct {
 	Url  string `json:"gremiumURL" xml:"gremiumURL"`
 }
 
-type MDBMedien struct {
+type Media struct {
 	Foto        Foto   `json:"mdbFoto" xml:"mdbFoto"`
 	SpeechesUrl string `json:"mdbRedenVorPlenumURL" xml:"mdbRedenVorPlenumURL"`
 	SpeechesRSS string `json:"mdbRedenVorPlenumRSS" xml:"mdbRedenVorPlenumRSS"`
