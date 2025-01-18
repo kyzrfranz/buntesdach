@@ -1,26 +1,34 @@
 package main
 
 import (
+	"log/slog"
+	"os"
+
 	v1 "github.com/kyzrfranz/buntesdach/api/v1"
+	"github.com/kyzrfranz/buntesdach/internal/config"
 	"github.com/kyzrfranz/buntesdach/internal/data"
 	"github.com/kyzrfranz/buntesdach/internal/http"
 	"github.com/kyzrfranz/buntesdach/internal/rest"
 	"github.com/kyzrfranz/buntesdach/internal/upstream"
 	"github.com/kyzrfranz/buntesdach/pkg/resources"
-	"log/slog"
-	"net/url"
-	"os"
 )
 
 func main() {
+	config, err := config.Seed()
+	if err != nil {
+		bail("Seeding config", err)
+	}
 
-	dataUrl := mustGetUrl("https://www.bundestag.de/xml/v2/mdb/index.xml") // TODO config
-	politicianReader := data.NewCatalogReader[v1.PersonCatalog, v1.PersonListEntry](&upstream.XMLFetcher{Url: dataUrl})
+	slog.Info("Config",
+		"dataURL", config.DataURL.String(),
+		"committeeURL", config.CommitteeURL.String(),
+		"serverPort", config.ServerPort,
+	)
 
-	committeeUrl := mustGetUrl("https://www.bundestag.de/xml/v2/ausschuesse/index.xml") // TODO config
-	committeeReader := data.NewCatalogReader[v1.CommitteeCatalog, v1.CommitteeListEntry](&upstream.XMLFetcher{Url: committeeUrl})
+	politicianReader := data.NewCatalogReader[v1.PersonCatalog, v1.PersonListEntry](&upstream.XMLFetcher{Url: config.DataURL})
+	committeeReader := data.NewCatalogReader[v1.CommitteeCatalog, v1.CommitteeListEntry](&upstream.XMLFetcher{Url: config.CommitteeURL})
 
-	apiServer := http.NewApiServer(8080)
+	apiServer := http.NewApiServer(config.ServerPort)
 
 	apiServer.Use(http.MiddlewareRecovery)
 	apiServer.Use(http.MiddlewareCORS)
@@ -43,13 +51,4 @@ func main() {
 func bail(stage string, err error) {
 	slog.Error("server bailing out", slog.String("stage", stage), "error", err)
 	os.Exit(1)
-}
-
-func mustGetUrl(s string) *url.URL {
-	parsedUrl, err := url.Parse(s)
-	if err != nil {
-		bail("parse data url", err)
-	}
-
-	return parsedUrl
 }
