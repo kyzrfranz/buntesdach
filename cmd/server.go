@@ -25,18 +25,18 @@ func main() {
 		"serverPort", config.ServerPort,
 	)
 
-	politicianReader := data.NewCatalogReader[v1.PersonCatalog, v1.PersonListEntry](&upstream.XMLFetcher{Url: config.DataURL})
-	committeeReader := data.NewCatalogReader[v1.CommitteeCatalog, v1.CommitteeListEntry](&upstream.XMLFetcher{Url: config.CommitteeURL})
+	politicianReader := data.NewCatalogReader[v1.PersonCatalog](&upstream.XMLFetcher{Url: config.DataURL})
+	committeeReader := data.NewCatalogReader[v1.CommitteeCatalog](&upstream.XMLFetcher{Url: config.CommitteeURL})
 
 	apiServer := http.NewApiServer(config.ServerPort)
 
 	apiServer.Use(http.MiddlewareRecovery)
 	apiServer.Use(http.MiddlewareCORS)
 
-	politicianCatalogHandler := rest.NewHandler[v1.PersonListEntry](resources.NewCatalogueRepo[v1.PersonListEntry](&politicianReader))
-	politicianDetailHandler := rest.NewHandler[v1.Politician](resources.NewDetailRepo[v1.Politician](&politicianReader))
-	committeeCatalogueHandler := rest.NewHandler[v1.CommitteeListEntry](resources.NewCatalogueRepo[v1.CommitteeListEntry](&committeeReader))
-	committeeDetailHandler := rest.NewHandler[v1.CommitteeDetails](resources.NewDetailRepo[v1.CommitteeDetails](&committeeReader))
+	politicianCatalogHandler := rest.NewHandler(resources.NewCatalogueRepo(&politicianReader))
+	politicianDetailHandler := rest.NewHandler(resources.NewDetailRepo[v1.Politician](&politicianReader))
+	committeeCatalogueHandler := rest.NewHandler(resources.NewCatalogueRepo(&committeeReader))
+	committeeDetailHandler := rest.NewHandler(resources.NewDetailRepo[v1.CommitteeDetails](&committeeReader))
 
 	apiServer.AddHandler("/politicians", politicianCatalogHandler.List)
 	apiServer.AddHandler("/politicians/{id}", politicianCatalogHandler.Get)
